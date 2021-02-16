@@ -13,12 +13,13 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from "@react-native-community/async-storage";
 import Server from "./Server";
-
+import {useNavigation} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { registerAnimation } from 'react-native-animatable';
 
 const App = (props) => {
-
+  let navigation = useNavigation();
+  
   React.useEffect(() => {
     inisilization();
     navigation.addListener('focus', () => {

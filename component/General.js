@@ -1,16 +1,9 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {View, StatusBar, Image, StyleSheet} from 'react-native';
 import {Container, Button, Text, Header, Body} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const App = () => {
   let navigation = useNavigation();
@@ -26,7 +19,7 @@ const App = () => {
         <Text style={{backgroundColor: '#3f51b5', width: '100%'}}></Text>
       </Header>
       <Body style={{width: '100%'}}>
-        <ScrollView>
+        <ScrollView style={{width: '100%',paddingHorizontal:40}}>
           <Button
             style={styles.btns}
             rounded
@@ -36,14 +29,20 @@ const App = () => {
           <Button
             style={styles.btns}
             rounded
-            onPressIn={() => navigation.navigate('LoginScreen')}>
+            onPressIn={() => navigation.navigate('OurServices')}>
             <Text style={styles.btnTxt}>Our Services</Text>
           </Button>
           <Button
             style={styles.btns}
             rounded
             onPressIn={() => navigation.navigate('Announcements')}>
-            <Text style={styles.btnTxt}>Announcement and Events</Text>
+            <Text style={styles.btnTxt}>Announcement</Text>
+          </Button>
+          <Button
+            style={styles.btns}
+            rounded
+            onPressIn={() => navigation.navigate('Events')}>
+            <Text style={styles.btnTxt}>Events</Text>
           </Button>
           <Button
             style={styles.btns}
@@ -51,6 +50,17 @@ const App = () => {
             onPressIn={() => navigation.navigate('DonateUs')}>
             <Text style={styles.btnTxt}>Donate Us</Text>
           </Button>
+          <Button
+            style={styles.btns}
+            rounded
+            danger
+            onPressIn={() => {
+              AsyncStorage.removeItem('Login_row').
+              then(() => navigation.goBack())
+              }}>
+            <Text style={styles.btnTxt}>Logout</Text>
+          </Button>
+
           <Text style={{fontSize: 18, color: 'gray', marginTop: '10%'}}>
             From{' '}
           </Text>

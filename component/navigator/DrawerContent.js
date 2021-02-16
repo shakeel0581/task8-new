@@ -97,6 +97,13 @@ export default function DrawerContent(props) {
               )}
               label="Events"
             />
+            <DrawerItem 
+              onPress={() => navigation.navigate('Budget')}
+              icon={({color, size}) => (
+                <Icon name="exit-to-app" color={color} size={size} />
+              )}
+              label="Add Budget"
+            />
             <DrawerItem
               icon={({color, size}) => (
                 <Icon name="exit-to-app" color={color} size={size} />

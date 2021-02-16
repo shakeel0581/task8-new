@@ -14,10 +14,12 @@ import {
   View,
   Item,
   Input,
-  Button
+  Button,
+  Picker
 } from 'native-base';
 import {TouchableOpacity, FlatList, StyleSheet, Modal} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+// import { Picker as SelectPicker } from '@react-native-picker/picker';
 import AsyncStorage from "@react-native-community/async-storage";
 import Server from "./Server";
 import Loader from "./Loader";
@@ -25,8 +27,10 @@ import Loader from "./Loader";
 const OurServices = ({route}) => {
 
   let navigation = useNavigation();
-  const { type } = route.params;
+  const type = route.params ? route.params.type : null;
+
   const [eventsData, setEventsData] = React.useState([]);
+  const [currentUser, setCurrentUser] = React.useState([]);
   const [loader, setloader] = React.useState(true);
   const [modal, setModal] = React.useState(false);
   const [service, setService] = React.useState('');
@@ -37,25 +41,41 @@ const OurServices = ({route}) => {
   const [CNIC, setCNIC] = React.useState('');
   const [Email, setEmail] = React.useState('');
   const [Des, setDes] = React.useState('');
-
+  const [form_object, setForm_object] = React.useState('');
+  const [selecteVal, setSelecteVal] = React.useState('Pending');
+  const [budget, setBudget] = React.useState('');
 
     useEffect(()=>{
-        AsyncStorage.getItem('Login_row').
+      init();
+      navigation.addListener('focus',() => {
+        init();
+      });
+    },[]);
+
+const init =() => {
+  setloader(true);
+  AsyncStorage.getItem('Login_row').
         then(val => {
             if (val == null) {
                 navigation.navigate('LoginScreen');
             } else {
                 const login_row = JSON.parse(val);
-                // console.log(login_row.access_token);
                 Server.get('api/service',{
                     headers:{
                         'Authorization': `Bearer ${login_row.access_token}`
                     }
                 }).
-                then(res => {
-                    console.log(login_row.access_token);
-                    setEventsData(res.data.services);
+                then(res1 => {
+                  Server.get('/api/getuser',{
+                    headers:{
+                        'Authorization': `Bearer ${login_row.access_token}`
+                    }
+                  }).then(res => {
+                    console.log('token',login_row)
+                    setEventsData(res1.data.services);
+                    setCurrentUser(res.data);
                     setloader(false);
+                  });
                 }).
                 catch(err => {
                     alert(err);
@@ -63,8 +83,8 @@ const OurServices = ({route}) => {
                 });
             }
         })
-    },[]);
-
+}
+console.log(currentUser)
     const addService = () => {
       setloader(true);
       setModal(false);
@@ -128,10 +148,9 @@ const OurServices = ({route}) => {
                 navigation.navigate('LoginScreen');
             } else {
               const login_row = JSON.parse(val);
-              Server.put(`api/service/${idDel}`,{
-                services:service,
-                form_object:"{name: 'Amjad'}",
-                attachments : null
+              Server.put(`api/service/status/${idDel}`,{
+                status : selecteVal,
+                note : `Approved By ${currentUser.fname}`
               },
               {
                 headers:{
@@ -139,20 +158,42 @@ const OurServices = ({route}) => {
                 }
               }).
               then(res => {
-                setService('');
-                Server.get('api/service',{
-                  headers:{
-                      'Authorization': `Bearer ${login_row.access_token}`
+                Server.get('/api/budget',{
+                  headers:{'Authorization': `Bearer ${login_row.access_token}`}
+                }).then(resBdg => {
+                  // const getBudgt = resBdg.data[0].budget_name;
+                  
+                  let budget_name = '';
+                  let budget_AddUp;
+                  if (service == 'Education') {
+                    budget_name = 'education_budget';
+                    budget_AddUp = resBdg.data[0].education_budget;
+                  } else if (service == 'House Help') {
+                    budget_name = 'house_budget';
+                    budget_AddUp = resBdg.data[0].house_budget;
+                  }else if (service == 'Medical') {
+                    budget_name = 'medical_budget';
+                    budget_AddUp = resBdg.data[0].medical_budget;
+                  }else if (service == 'Marriage Help') {
+                    budget_name = 'marriage_budget';
+                    budget_AddUp = resBdg.data[0].marriage_budget;
+                  }else{
+                    budget_name = 'other_budget'
+                    budget_AddUp = resBdg.data[0].other_budget;
                   }
-                }).
-                then(res => {
-                    console.log(login_row.access_token);
-                    setEventsData(res.data.services);
-                    setloader(false);
-                }).
-                catch(err => {
-                    alert(err);
-                    setloader(false);
+                    const total = parseInt(budget_AddUp, 10) + parseInt(budget, 10);
+                    console.log('access token',total,budget_name)
+
+                    Server.post('/api/budget',{[`${budget_name}`]:total},{
+                      headers:{'Authorization': `Bearer ${login_row.access_token}`}
+                    }).then(res => {
+                      console.log(res.data)
+                      setService('');
+                      setForm_object('');
+                      setSelecteVal('Pending');
+                      setBudget('');
+                      init(); 
+                    });
                 });
               }).
               catch(err => {
@@ -163,27 +204,62 @@ const OurServices = ({route}) => {
         })
     }
 
+    const itemList = (item) => {
+      const obj = item.form_object.split(',');
+      return(
+        <View style={styles.container}>
+          <View style={{width:'90%'}}>
+            <Text style={styles.title}> {item.services}</Text>
+            <Text style={styles.desc}> {obj[0]}</Text>
+            <Text style={styles.desc}> {obj[1]}</Text>
+            <Text style={styles.desc}> {obj[2]}</Text>
+            <Text style={styles.desc}> {obj[3]}</Text>
+            <Text style={styles.desc}> status {item.status}</Text>
+            <Text style={styles.date}> {item.note}</Text>
+          </View>
+          {currentUser.isAdmin == '1' &&
+            <View style={{width:'10%',alignSelf:'center'}}>
+              <Icon onPress={()=>{setModalDel(true);setIdDel(item.id)}} style={{marginBottom:15,color:'red'}} active name="delete" type="AntDesign" />
+              <Icon onPress={()=>{
+                setModalDel(true);
+                setIdDel(item.id);
+                setService(item.services);
+                setForm_object(item.form_object);
+                }} 
+                style={{color:'green'}} 
+                active name="edit" type="AntDesign" />
+            </View>
+          }
+        </View>
+      )
+    }
+
   return (
     <Container>
+      
       <Header
         style={{
           textAlign: 'center',
           alignItems: 'center',
           backgroundColor: '#f2f2f2',
         }}>
-        <Left>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon active name="arrowleft" type="AntDesign" />
-          </TouchableOpacity>
-        </Left>
+        {type != null &&
+          <Left>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Icon active name="arrowleft" type="AntDesign" />
+            </TouchableOpacity>
+          </Left>
+        }
         <Body>
-          <Text>{type}</Text>
+          <Text>{type ? type : 'Services List'}</Text>
         </Body>
-        <Right>
-          <TouchableOpacity onPress={() => setModal(true)}>
-            <Icon active name="plus" type="AntDesign" />
-          </TouchableOpacity>
-        </Right>
+        {type != null &&
+          <Right>
+            <TouchableOpacity onPress={() => setModal(true)}>
+              <Icon active name="plus" type="AntDesign" />
+            </TouchableOpacity>
+          </Right>
+        }
       </Header>
       <Loader loading={loader} />
         <FlatList
@@ -191,27 +267,11 @@ const OurServices = ({route}) => {
             data={eventsData}
             renderItem={ ({item}) => 
                 <>
-                
-                { item.services == type &&
-                
-                  <View style={styles.container}>
-                    <View style={{width:'100%'}}>
-                      <Text style={styles.title}> {item.services}</Text>
-                      {/* { item.form_object.substring(1, item.form_object.length-1)
-                        item.form_object.split(',\n').map(val => {
-                          return<Text key={val} style={styles.desc}> status {val}</Text>
-                        })
-                      } */}
-                      <Text style={styles.desc}> {JSON.parse(item.form_object)}</Text>
-                      <Text style={styles.desc}> status {item.status}</Text>
-                      <Text style={styles.date}> {item.note}</Text>
-                    </View>
-                    
-                    {/* <View style={{width:'10%',alignItems:'flex-end',alignSelf:'center'}}>
-                      <Icon onPress={()=>{setModalDel(true);setIdDel(item.id)}} style={{marginBottom:15,color:'red'}} active name="delete" type="AntDesign" />
-                      <Icon onPress={()=>{setModalDel(true);setIdDel(item.id);setService(item.services)}} style={{color:'green'}} active name="edit" type="AntDesign" />
-                    </View> */}
-                </View>
+                {type != null ?(
+                    item.services == type &&
+                    itemList(item)
+                  ):
+                  itemList(item)
                 }
                 </>
             }
@@ -347,15 +407,15 @@ const OurServices = ({route}) => {
                 <View style={styles.modalContainer}>
                   <View style={{width:'100%'}}>
                   <View style={{flexDirection:'row',alignSelf:'center',marginVertical:10}}>
-                      <Text style={{fontSize:14,fontWeight:'bold',color:'#187ce6',}}>Update Services</Text>
+                      <Text style={{fontSize:14,fontWeight:'bold',color:'#187ce6',}}>Approve/Reject {service}</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center',marginBottom:10}}>
                       <View style={{flex: 1, height: 1, backgroundColor: 'lightgray'}} />
                     </View>
-                  <View style={styles.inputOuter}>
+                    <View style={styles.inputOuter}>
                       <Text style={{marginLeft: '1%', marginTop: '2%', fontSize: 14}}>
                         {' '}
-                        Service{' '}
+                        Selecte Status{' '}
                       </Text>
                       <Item
                         style={{
@@ -363,17 +423,47 @@ const OurServices = ({route}) => {
                           marginLeft: '2%',
                           borderColor: 'black',
                           borderWidth: 1,
-                          marginBottom:10
+                          marginBottom:10,
                         }}
                         rounded>
-                        <Input 
-                        style={{height:40}}
-                          value={service}
-                          onChangeText={(val) => setService(val)}
-                          placeholder=""
-                        />
+                          <Picker
+                            note
+                            mode="dropdown"
+                            style={{ height:40}}
+                            selectedValue={selecteVal}
+                            onValueChange={(val) => setSelecteVal(val)}
+                          >
+                            <Picker.Item label="Pending" value="Pending" />
+                          <Picker.Item label="Reject" value="Rejected" />
+                          <Picker.Item label="Approve" value="Approved" />
+                        </Picker>
                       </Item>
                     </View>
+                        {selecteVal == 'Approved' &&
+                        <View style={styles.inputOuter}>
+                          <Text style={{marginLeft: '1%', marginTop: '2%', fontSize: 14}}>
+                            {' '}
+                            Budget{' '}
+                          </Text>
+                          <Item
+                            style={{
+                              width: '95%',
+                              marginLeft: '2%',
+                              borderColor: 'black',
+                              borderWidth: 1,
+                              marginBottom:10
+                            }}
+                            rounded>
+                            <Input 
+                              keyboardType="decimal-pad"
+                              style={{height:40}}
+                              value={budget}
+                              onChangeText={(val) => setBudget(val)}
+                              placeholder=""
+                            />
+                          </Item>
+                        </View>
+                      }
                     <Button
                       danger={true}
                       style={[styles.btns]}
@@ -433,8 +523,8 @@ const styles = StyleSheet.create({
       alignItems:'center'
     },
     modalContainer:{
-      height:200,
-      width:250,
+      height:300,
+      width:300,
       backgroundColor:'#fff',
       borderRadius:15,
       justifyContent:'space-between',

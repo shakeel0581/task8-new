@@ -12,6 +12,7 @@ import * as Animatable from 'react-native-animatable';
 import Screen1 from './MyServices1';
 import Screen2 from './MyServices2';
 import ServicesList from "./TabScreen/services";
+import ServiceRequest from "./OurServices";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +29,7 @@ const Services = () => {
       }}>
       <Tab.Screen
         name="Home2"
-        component={Screen1}
+        component={ServiceRequest}
         options={{
           tabBarLabel: () => {
             return (
@@ -38,9 +39,9 @@ const Services = () => {
                   width: '120%',
                   color: 'white',
                   textAlign: 'center',
-                  fontSize: 12,
+                  fontSize: 10,
                 }}>
-                Services
+                Services Request
               </Text>
             );
           },

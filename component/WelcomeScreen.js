@@ -46,6 +46,13 @@ const App = () => {
         rounded>
         <Text style={styles.btnTxt}>general person</Text>
       </Button>
+      <Button
+        warning={true}
+        style={styles.btns}
+        onPressIn={() => navigation.navigate('LoginScreen')}
+        rounded>
+        <Text style={styles.btnTxt}>Admin</Text>
+      </Button>
       <Title style={{fontSize: 20, color: 'lightgray', marginTop: '5%'}}>
         From{' '}
       </Title>

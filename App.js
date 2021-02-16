@@ -28,6 +28,7 @@ import Announcements from './component/Announcements';
 import DonateUs from './component/DonateUs';
 import OurServices from './component/OurServices';
 import Settings from './component/Settings';
+import Budget from './component/TabScreen/budget';
 import Events from './component/Events';
 import Update_Profile from './component/Update_Profile';
 import Nav from './component/navigator/DrawerNavigator';
@@ -43,6 +44,11 @@ const MainApp = () => {
         <Stack.Screen
           name="Home"
           component={App}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Budget"
+          component={Budget}
           options={{headerShown: false}}
         />
         <Stack.Screen

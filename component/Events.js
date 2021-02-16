@@ -28,6 +28,8 @@ const Events = () => {
   let [show, setShow] = React.useState(false);
   let navigation = useNavigation();
   const [eventsData, setEventsData] = React.useState([]);
+  const [currentUser, setCurrentUser] = React.useState([]);
+
   const [loader, setloader] = React.useState(true);
   const [modal, setModal] = React.useState(false);
   const [title, settitle] = React.useState('');
@@ -63,10 +65,16 @@ const Events = () => {
             'Authorization': `Bearer ${login_row.access_token}`
         }
     }).
-    then(res => {
-        // console.log(res.data);
-        setEventsData(res.data);
+    then(res1 => {
+      setEventsData(res1.data);
+      Server.get('/api/getuser',{
+        headers:{
+            'Authorization': `Bearer ${login_row.access_token}`
+        }
+      }).then(res => {
+        setCurrentUser(res.data);
         setloader(false);
+      });
     }).
     catch(err => {
         alert(err);
@@ -184,11 +192,16 @@ const Events = () => {
         <Body>
           <Text>Events</Text>
         </Body>
-        {/* <Right>
-          <TouchableOpacity onPress={() => setModal(true)}>
+        {currentUser.isAdmin == '1' &&  <Right>
+        <TouchableOpacity onPress={() => {
+              setModal(true);
+              settitle('');
+              setdes('');
+              setDate('');
+            }}>
             <Icon active name="plus" type="AntDesign" />
           </TouchableOpacity>
-        </Right> */}
+        </Right> }
       </Header>
       <Loader loading={loader} />
         <FlatList
@@ -196,13 +209,13 @@ const Events = () => {
             data={eventsData}
             renderItem={ ({item}) => 
                 <View style={styles.container}>
-                <View style={{width:'100%'}}>
+                <View style={{width:'90%'}}>
                   <Text style={styles.title}> {item.title}</Text>
                     <Text style={styles.desc}> {item.description}</Text>
                     <Text style={styles.date}> {item.expiry}</Text>
                 </View>
-{/*                 
-                <View style={{width:'30%',alignItems:'flex-end',alignSelf:'center'}}>
+              {currentUser.isAdmin == '1' &&                 
+                <View style={{width:'10%',alignItems:'flex-end',alignSelf:'center'}}>
                 <Icon onPress={()=>{setModalDel2(true);setIdDel(item.id)}} style={{marginBottom:15,color:'red'}} active name="delete" type="AntDesign" />
 
                   <Icon onPress={()=>{
@@ -212,7 +225,7 @@ const Events = () => {
                     setdes(item.description);
                     setDate(item.expiry);
                     }} style={{color:'green'}} active name="edit" type="AntDesign" />
-                </View> */}
+                </View>}
             </View>
             }
             keyExtractor={(item) => item.id.toString()}
@@ -229,7 +242,7 @@ const Events = () => {
                 <View style={styles.modalContainer}>
                   <View style={{width:'100%',marginVertical:10}}>
                     <View style={{flexDirection:'row',alignSelf:'center'}}>
-                      <Text style={{fontSize:14,fontWeight:'bold',color:'#187ce6',}}>Add Announcement</Text>
+                      <Text style={{fontSize:14,fontWeight:'bold',color:'#187ce6',}}>Add Event</Text>
                     </View> 
                     <View style={{flexDirection: 'row', alignItems: 'center',margin:10}}>
                       <View style={{flex: 1, height: 1, backgroundColor: 'lightgray'}} />
@@ -335,7 +348,7 @@ const Events = () => {
                 <View style={styles.modalContainer}>
                   <View style={{width:'100%'}}>
                   <View style={{flexDirection:'row',alignSelf:'center',marginVertical:10}}>
-                      <Text style={{fontSize:14,fontWeight:'bold',color:'#187ce6',}}>Update Services</Text>
+                      <Text style={{fontSize:14,fontWeight:'bold',color:'#187ce6',}}>Update Event</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center',marginBottom:10}}>
                       <View style={{flex: 1, height: 1, backgroundColor: 'lightgray'}} />
@@ -441,7 +454,7 @@ const Events = () => {
                 <View style={styles.modalContainerDel}>
                   <View style={{width:'100%'}}>
                   <View style={{flexDirection:'row',alignSelf:'center',marginVertical:10}}>
-                      <Text style={{fontSize:14,fontWeight:'bold',color:'#187ce6',}}>Delete announcement ?</Text>
+                      <Text style={{fontSize:14,fontWeight:'bold',color:'#187ce6',}}>Delete Event ?</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center',marginBottom:10}}>
                       <View style={{flex: 1, height: 1, backgroundColor: 'lightgray'}} />
