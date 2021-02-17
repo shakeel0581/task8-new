@@ -12,19 +12,52 @@ import {
   Switch,
 } from 'react-native-paper';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, CommonActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icons from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
+import Server from "../Server";
 
 export default function DrawerContent(props) {
- 
+  const [currentUser, setCurrentUser] = React.useState([]);
   const [expanded, setExpanded] = useState([false,false,false,false,false,false,false,false]);
-  let navigation = useNavigation();
-  
+  const {navigation} = props;
+  useEffect(()=>{
+    init();
+  },[]);
+  const init =() => {
+    AsyncStorage.getItem('Login_row').
+          then(val => {
+              if (val == null) {
+                  navigation.navigate('LoginScreen');
+              } else {
+                  const login_row = JSON.parse(val);
+                  console.log(login_row)
+                    Server.get('/api/getuser',{
+                      headers:{
+                          'Authorization': `Bearer ${login_row.access_token}`
+                      }
+                    }).then(res => {
+                      setCurrentUser(res.data);
+                  }).
+                  catch(err => {
+                      alert(err);
+                  });
+              }
+          })
+  }
 
-  // console.log("arry");
-  // console.log(arry);
+  const logoutHandaler = ()=>{
+    AsyncStorage.clear();
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          { name: 'Welcome' }
+        ],
+      })
+    );
+  }
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
@@ -39,10 +72,10 @@ export default function DrawerContent(props) {
               />
               <View style={{marginLeft: 15, flexDirection: 'column'}}>
                 <Title style={styles.title}>
-                 Sameer
+                 {currentUser.fname} {currentUser.lname}
                 </Title>
                 <Caption style={styles.caption}>
-                  @sameer
+                {currentUser.email}
                 </Caption>
               </View>
             </View>
@@ -97,6 +130,7 @@ export default function DrawerContent(props) {
               )}
               label="Events"
             />
+            {currentUser.isAdmin == '1' &&
             <DrawerItem 
               onPress={() => navigation.navigate('Budget')}
               icon={({color, size}) => (
@@ -104,6 +138,7 @@ export default function DrawerContent(props) {
               )}
               label="Add Budget"
             />
+            }
             <DrawerItem
               icon={({color, size}) => (
                 <Icon name="exit-to-app" color={color} size={size} />
@@ -111,10 +146,7 @@ export default function DrawerContent(props) {
               label="Donate Now"
             />
             <DrawerItem
-              onPress={() => {
-                AsyncStorage.removeItem('Login_row').
-                then(() => navigation.navigate('LoginScreen'))
-                }}
+              onPress={logoutHandaler}
               icon={({color, size}) => (
                 <Icon name="exit-to-app" color={color} size={size} />
               )}

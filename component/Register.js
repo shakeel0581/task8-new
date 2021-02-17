@@ -13,28 +13,16 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from "@react-native-community/async-storage";
 import Server from "./Server";
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation,CommonActions} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { registerAnimation } from 'react-native-animatable';
+import Loader from "./Loader";
+
 
 const App = (props) => {
   let navigation = useNavigation();
+  const [loader, setloader] = React.useState(false);
   
-  React.useEffect(() => {
-    inisilization();
-    navigation.addListener('focus', () => {
-      inisilization();
-    });
-  }, []);
-
-  const inisilization = () => {
-    AsyncStorage.getItem('Login_row').
-      then(val => {
-        if (val != null) {
-          navigation.goBack();
-        } 
-      });
-  }
 
   let [show, setShow] = useState(false);
   const [date, setDate] = useState(new Date(1598051730000));
@@ -55,6 +43,7 @@ const App = (props) => {
   };
 
   const registerUser = () => {
+    setloader(true);
     Server.post('api/signup',{
       fname: fName,
       lname:lname ,
@@ -74,11 +63,22 @@ const App = (props) => {
     then(res => {
       AsyncStorage.setItem('Login_row',JSON.stringify(res.data)).
       then(res => {
-        props.navigation.navigate('Nav');
+        props.navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              { name: 'Nav' }
+            ],
+          })
+        );
         alert('Registration Success');
+        setloader(false);
       })
     }).
-    catch(err => alert('Invalid or already exist CNIC or Email'));
+    catch(err => {
+      alert('Invalid or already exist CNIC or Email');
+    setloader(false);
+  });
   }
 
   return (
@@ -114,6 +114,8 @@ const App = (props) => {
         </Header>
 
         <Form style={styles.form}>
+        <Loader loading={loader} />
+
           <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.inputOuter}>
               <Text style={{marginLeft: '1%', fontSize: 14}}> First Name </Text>
@@ -371,10 +373,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: '3%',
   },
-  inputOuter: {
-    marginLeft: '2%',
-    marginTop: 15,
-  },
+  // inputOuter: {
+  //   marginLeft: '2%',
+  //   marginTop: 15,
+  // },
 });
 
 export default App;

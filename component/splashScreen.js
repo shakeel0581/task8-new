@@ -9,7 +9,7 @@
 import React from 'react';
 import {View, StatusBar, Image} from 'react-native';
 import {Container, Body, Title} from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 import AsyncStorage from "@react-native-community/async-storage";
 
 const App = () => {
@@ -18,9 +18,23 @@ const App = () => {
       AsyncStorage.getItem('Login_row').
       then(val => {
         if (val != null) {
-          navigation.navigate("Nav");
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                { name: 'Nav' }
+              ],
+            })
+          );
         }else{
-          navigation.navigate("Welcome");
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                { name: 'Welcome' }
+              ],
+            })
+          );
         }
       });
         

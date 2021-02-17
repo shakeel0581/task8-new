@@ -47,6 +47,11 @@ const MainApp = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
+          name="Nav"
+          component={Nav}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="Budget"
           component={Budget}
           options={{headerShown: false}}
@@ -74,11 +79,6 @@ const MainApp = () => {
         <Stack.Screen
           name="Events"
           component={Events}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Nav"
-          component={Nav}
           options={{headerShown: false}}
         />
         <Stack.Screen

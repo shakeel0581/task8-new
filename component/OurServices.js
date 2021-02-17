@@ -71,7 +71,7 @@ const init =() => {
                         'Authorization': `Bearer ${login_row.access_token}`
                     }
                   }).then(res => {
-                    console.log('token',login_row)
+                    // console.log('token',login_row)
                     setEventsData(res1.data.services);
                     setCurrentUser(res.data);
                     setloader(false);
@@ -84,7 +84,7 @@ const init =() => {
             }
         })
 }
-console.log(currentUser)
+
     const addService = () => {
       setloader(true);
       setModal(false);
@@ -204,6 +204,8 @@ console.log(currentUser)
         })
     }
 
+    
+
     const itemList = (item) => {
       const obj = item.form_object.split(',');
       return(
@@ -219,7 +221,7 @@ console.log(currentUser)
           </View>
           {currentUser.isAdmin == '1' &&
             <View style={{width:'10%',alignSelf:'center'}}>
-              <Icon onPress={()=>{setModalDel(true);setIdDel(item.id)}} style={{marginBottom:15,color:'red'}} active name="delete" type="AntDesign" />
+              {/* <Icon onPress={()=>{setModalDel(true);setIdDel(item.id)}} style={{marginBottom:15,color:'red'}} active name="delete" type="AntDesign" /> */}
               <Icon onPress={()=>{
                 setModalDel(true);
                 setIdDel(item.id);

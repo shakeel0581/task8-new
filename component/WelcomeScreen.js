@@ -10,9 +10,24 @@ import React from 'react';
 import {View, StatusBar, Image, StyleSheet} from 'react-native';
 import {Container, Body, Title, Button, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from "@react-native-community/async-storage";
 
 const App = () => {
   let navigation = useNavigation();
+  React.useEffect(() => {
+    handalAuth();
+    navigation.addListener('focus', handalAuth);
+  });
+
+const  handalAuth = () => {
+  AsyncStorage.getItem('Login_row').
+    then(val => {
+      if (val != null) {
+        navigation.navigate("Nav");
+      }
+    });
+}
+    
 
   return (
     <Container

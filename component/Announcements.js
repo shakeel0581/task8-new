@@ -48,8 +48,8 @@ const ListAvatarExample = () => {
         AsyncStorage.getItem('Login_row').
         then(val => {
             if (val == null) {
-                setloader(false);
-                navigation.navigate('LoginScreen');
+              const login_row = {"access_token": "", "expires_in": 0, "token_type": "bearer"}
+              reFresh(login_row);
             } else {
                 const login_row = JSON.parse(val);
                 // console.log(login_row.access_token);

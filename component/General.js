@@ -50,16 +50,6 @@ const App = () => {
             onPressIn={() => navigation.navigate('DonateUs')}>
             <Text style={styles.btnTxt}>Donate Us</Text>
           </Button>
-          <Button
-            style={styles.btns}
-            rounded
-            danger
-            onPressIn={() => {
-              AsyncStorage.removeItem('Login_row').
-              then(() => navigation.goBack())
-              }}>
-            <Text style={styles.btnTxt}>Logout</Text>
-          </Button>
 
           <Text style={{fontSize: 18, color: 'gray', marginTop: '10%'}}>
             From{' '}

@@ -18,35 +18,22 @@ import {
   Header,
   Label,
 } from 'native-base';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, CommonActions} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Server from "./Server";
 import AsyncStorage from "@react-native-community/async-storage";
-
+import Loader from "./Loader";
 const App = () => {
   let navigation = useNavigation();
-
-  React.useEffect(() => {
-    inisilization();
-    navigation.addListener('focus', () => {
-      inisilization();
-    });
-  }, []);
-
-  const inisilization = () => {
-    AsyncStorage.getItem('Login_row').
-      then(val => {
-        if (val != null) {
-          navigation.goBack();
-        } 
-      });
-  }
+  const [loader, setloader] = React.useState(false);
+ 
 
   const [email, setEmail] = React.useState('owais.raza@codup.io');
   const [memberId, setMemberId] = React.useState('42201-2399157-3');
   const [password, setPassword] = React.useState('test123');
 
   const LogIn = () => {
+    setloader(true);
     // navigation.navigate('Nav');
     // console.log(email,memberId,password)
     Server.post('api/login',{
@@ -55,14 +42,29 @@ const App = () => {
       password: password
   }).
     then(res => {
-      // console.log(res.data)
-      AsyncStorage.setItem('Login_row',JSON.stringify(res.data)).
-      then(res => {
-        navigation.navigate('Nav');
-        alert('Login Success');
-      })
+      if (res.data.message) {
+        setloader(false);
+        alert(res.data.message);
+      } else {
+        AsyncStorage.setItem('Login_row',JSON.stringify(res.data)).
+        then(res => {
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [
+                { name: 'Nav' }
+              ],
+            })
+          );
+          setloader(false);
+          alert('Login Success');
+        });
+      }
     }).
-    catch(err => alert('Invalid CNIC, Email or Password'));
+    catch(err =>{
+       alert('Invalid CNIC, Email or Password OR User is not active');
+       setloader(false);
+      });
   }
 
   return (
@@ -100,6 +102,7 @@ const App = () => {
       />
       <Form style={styles.form}>
         <KeyboardAwareScrollView>
+        <Loader loading={loader} />
           <View style={styles.inputOuter}>
             <Text style={{marginLeft: '1%', fontSize: 14}}> Member ID </Text>
             <Item
@@ -222,7 +225,7 @@ const styles = StyleSheet.create({
     // flexDirection: 'row',
     // justifyContent: 'center',
     // alignItems: 'center',
-    marginLeft: '5%',
+    // marginLeft: '5%',
   },
   btnTxt: {
     width: '100%',
