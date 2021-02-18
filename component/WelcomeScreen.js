@@ -57,17 +57,18 @@ const  handalAuth = () => {
       <Button
         warning={true}
         style={styles.btns}
-        onPressIn={() => navigation.navigate('General')}
+        onPressIn={() => navigation.navigate('LoginScreen',{name :'Admin'})}
         rounded>
-        <Text style={styles.btnTxt}>general person</Text>
+        <Text style={styles.btnTxt}>Admin</Text>
       </Button>
       <Button
         warning={true}
         style={styles.btns}
-        onPressIn={() => navigation.navigate('LoginScreen')}
+        onPressIn={() => navigation.navigate('General')}
         rounded>
-        <Text style={styles.btnTxt}>Admin</Text>
+        <Text style={styles.btnTxt}>general person</Text>
       </Button>
+      
       <Title style={{fontSize: 20, color: 'lightgray', marginTop: '5%'}}>
         From{' '}
       </Title>

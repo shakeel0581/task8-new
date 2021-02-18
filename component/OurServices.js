@@ -245,13 +245,11 @@ const init =() => {
           alignItems: 'center',
           backgroundColor: '#f2f2f2',
         }}>
-        {type != null &&
           <Left>
             <TouchableOpacity onPress={() => navigation.goBack()}>
               <Icon active name="arrowleft" type="AntDesign" />
             </TouchableOpacity>
           </Left>
-        }
         <Body>
           <Text>{type ? type : 'Services List'}</Text>
         </Body>

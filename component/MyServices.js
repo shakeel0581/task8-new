@@ -16,7 +16,6 @@ import ServiceRequest from "./OurServices";
 
 const Tab = createBottomTabNavigator();
 
-
 const Services = () => {
   let [currentScreen, setCurrentScreen] = useState();
   let [show, setShow] = useState(false);
@@ -29,7 +28,7 @@ const Services = () => {
       }}>
       <Tab.Screen
         name="Home2"
-        component={ServiceRequest}
+        component={ServicesList}
         options={{
           tabBarLabel: () => {
             return (

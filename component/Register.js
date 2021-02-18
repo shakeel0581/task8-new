@@ -377,6 +377,13 @@ const styles = StyleSheet.create({
   //   marginLeft: '2%',
   //   marginTop: 15,
   // },
+  // inputOuter: {
+  //   marginLeft: '2%',
+  //   marginTop: 15,
+  // },
+
+
+
 });
 
 export default App;

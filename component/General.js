@@ -15,6 +15,8 @@ const App = () => {
         height: '100%',
         width: '100%',
       }}>
+
+        
       <Header>
         <Text style={{backgroundColor: '#3f51b5', width: '100%'}}></Text>
       </Header>

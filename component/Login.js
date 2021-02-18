@@ -23,14 +23,18 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Server from "./Server";
 import AsyncStorage from "@react-native-community/async-storage";
 import Loader from "./Loader";
-const App = () => {
+const App = ({route}) => {
   let navigation = useNavigation();
   const [loader, setloader] = React.useState(false);
- 
+  const name = route.params ? route.params.name : null;
 
-  const [email, setEmail] = React.useState('owais.raza@codup.io');
-  const [memberId, setMemberId] = React.useState('42201-2399157-3');
-  const [password, setPassword] = React.useState('test123');
+  const [email, setEmail] = React.useState('');
+  const [memberId, setMemberId] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  // const [email, setEmail] = React.useState('owais.raza@codup.io');
+  // const [memberId, setMemberId] = React.useState('42201-2399157-3');
+  // const [password, setPassword] = React.useState('test123');
 
   const LogIn = () => {
     setloader(true);
@@ -91,7 +95,8 @@ const App = () => {
             },
           ]}>
           {' '}
-          Login
+          {name} Login
+          
         </Text>
       </Header>
       {/* <Text style={styles.loginTxt}>Login</Text> */}
@@ -193,7 +198,7 @@ const App = () => {
         onPressIn={() => LogIn()}
         // onPressIn={() => navigation.navigate('Nav')}
         >
-        <Text style={styles.btnTxt}>login</Text>
+        <Text style={styles.btnTxt}>{name} login</Text>
       </Button>
     </Container>
   );

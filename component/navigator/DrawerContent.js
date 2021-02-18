@@ -58,6 +58,7 @@ export default function DrawerContent(props) {
       })
     );
   }
+  
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
@@ -110,12 +111,6 @@ export default function DrawerContent(props) {
               }}
             />
            
-            <DrawerItem
-              icon={({color, size}) => (
-                <Icon name="exit-to-app" color={color} size={size} />
-              )}
-              label="Services"
-            />
             <DrawerItem 
               onPress={() => navigation.navigate('Announcements')}
               icon={({color, size}) => (
