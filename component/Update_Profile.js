@@ -76,6 +76,19 @@ const App = (props) => {
           })
   }
 
+  const logoutHandaler = ()=>{
+    AsyncStorage.clear();
+    alert('Profile has been updated please log in again to continue');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          { name: 'Welcome' }
+        ],
+      })
+    );
+  }
+
   const registerUser = () => {
     setloader(true);
     Server.put('api/update_profile',{
@@ -93,15 +106,7 @@ const App = (props) => {
     then(res => {
       AsyncStorage.setItem('Login_row',JSON.stringify(res.data)).
       then(res => {
-        props.navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [
-              { name: 'Nav' }
-            ],
-          })
-        );
-        alert('Profile updated');
+        logoutHandaler();
         setloader(false);
       })
     }).

@@ -207,7 +207,10 @@ const init =() => {
     
 
     const itemList = (item) => {
-      const obj = item.form_object.split(',');
+      const obj_row = item.form_object.toString().replace(/\s/g, '');
+      const obj_row2 = obj_row.toString().replace(/\\n/g, '');
+      const obj = obj_row2.split(',');
+      console.log()
       return(
         <View style={styles.container}>
           <View style={{width:'90%'}}>
@@ -221,15 +224,18 @@ const init =() => {
           </View>
           {currentUser.isAdmin == '1' &&
             <View style={{width:'10%',alignSelf:'center'}}>
-              {/* <Icon onPress={()=>{setModalDel(true);setIdDel(item.id)}} style={{marginBottom:15,color:'red'}} active name="delete" type="AntDesign" /> */}
-              <Icon onPress={()=>{
-                setModalDel(true);
-                setIdDel(item.id);
-                setService(item.services);
-                setForm_object(item.form_object);
-                }} 
-                style={{color:'green'}} 
-                active name="edit" type="AntDesign" />
+              {item.status == 'Approved' ?
+              <Icon style={{color:'green'}} active name="checksquare" type="AntDesign" />
+                :
+                <Icon onPress={()=>{
+                  setModalDel(true);
+                  setIdDel(item.id);
+                  setService(item.services);
+                  setForm_object(item.form_object);
+                  }} 
+                  style={{color:'#ffc107'}} 
+                  active name="edit" type="AntDesign" />
+              }
             </View>
           }
         </View>

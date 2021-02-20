@@ -31,7 +31,7 @@ const App = () => {
           <Button
             style={styles.btns}
             rounded
-            onPressIn={() => navigation.navigate('OurServices')}>
+            onPressIn={() => navigation.navigate('Service')}>
             <Text style={styles.btnTxt}>Our Services</Text>
           </Button>
           <Button
@@ -52,14 +52,6 @@ const App = () => {
             onPressIn={() => navigation.navigate('DonateUs')}>
             <Text style={styles.btnTxt}>Donate Us</Text>
           </Button>
-
-          <Text style={{fontSize: 18, color: 'gray', marginTop: '10%'}}>
-            From{' '}
-          </Text>
-          <Text
-            style={{fontSize: 20, color: 'gray', textTransform: 'uppercase'}}>
-            editor systima{' '}
-          </Text>
         </ScrollView>
       </Body>
     </Container>

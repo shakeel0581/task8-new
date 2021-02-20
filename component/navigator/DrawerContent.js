@@ -19,33 +19,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Server from "../Server";
 
 export default function DrawerContent(props) {
-  const [currentUser, setCurrentUser] = React.useState([]);
+  
   const [expanded, setExpanded] = useState([false,false,false,false,false,false,false,false]);
   const {navigation} = props;
-  useEffect(()=>{
-    init();
-  },[]);
-  const init =() => {
-    AsyncStorage.getItem('Login_row').
-          then(val => {
-              if (val == null) {
-                  navigation.navigate('LoginScreen');
-              } else {
-                  const login_row = JSON.parse(val);
-                  console.log(login_row)
-                    Server.get('/api/getuser',{
-                      headers:{
-                          'Authorization': `Bearer ${login_row.access_token}`
-                      }
-                    }).then(res => {
-                      setCurrentUser(res.data);
-                  }).
-                  catch(err => {
-                      alert(err);
-                  });
-              }
-          })
-  }
+
 
   const logoutHandaler = ()=>{
     AsyncStorage.clear();
@@ -73,10 +50,10 @@ export default function DrawerContent(props) {
               />
               <View style={{marginLeft: 15, flexDirection: 'column'}}>
                 <Title style={styles.title}>
-                 {currentUser.fname} {currentUser.lname}
+                 {props.currentUser.fname} {props.currentUser.lname}
                 </Title>
                 <Caption style={styles.caption}>
-                {currentUser.email}
+                {props.currentUser.email}
                 </Caption>
               </View>
             </View>
@@ -88,18 +65,18 @@ export default function DrawerContent(props) {
                 <Icon name="home-outline" color={color} size={size} />
               )}
               label="Home"
-              onPress={() => {
-                props.navigation.navigate('HomeScreen');
-              }}
+              // onPress={() => {
+              //   props.navigation.navigate('HomeScreen');
+              // }}
             />
             <DrawerItem
               icon={({color, size}) => (
                 <Icons name="staro" color={color} size={size} />
               )}
               label="Overview"
-              onPress={() => {
-                props.navigation.navigate('Featured');
-              }}
+              // onPress={() => {
+              //   props.navigation.navigate('Featured');
+              // }}
             />
             <DrawerItem
               icon={({color, size}) => (
@@ -125,7 +102,7 @@ export default function DrawerContent(props) {
               )}
               label="Events"
             />
-            {currentUser.isAdmin == '1' &&
+            {props.currentUser.isAdmin == '1' &&
             <DrawerItem 
               onPress={() => navigation.navigate('Budget')}
               icon={({color, size}) => (
@@ -138,6 +115,7 @@ export default function DrawerContent(props) {
               icon={({color, size}) => (
                 <Icon name="exit-to-app" color={color} size={size} />
               )}
+              onPress={() => navigation.navigate('DonateUs')}
               label="Donate Now"
             />
             <DrawerItem

@@ -11,10 +11,12 @@ import {useNavigation} from '@react-navigation/native';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-community/async-storage';
 import Server from "../Server";
+import Loader from "../Loader";
 
 export default App = () => {
     let navigation = useNavigation();
     let [show, setShow] = useState(false);
+    let [loader, setLoader] = useState(true);
     const [currentUser, setCurrentUser] = React.useState([]);
 
     React.useEffect(()=>{
@@ -34,35 +36,27 @@ export default App = () => {
                         }
                       }).then(res => {
                         setCurrentUser(res.data);
+                        setLoader(false);
                     }).
                     catch(err => {
                         alert(err);
+                        setLoader(false);
                     });
                 }
             })
+    }
+
+    if (loader) {
+      return  <Loader />
     }
   
     return (
       <Container
         style={styles.container}>
-        {show && (
-          <Animatable.View
-            style={styles.inner}
-            animation="lightSpeedIn">
-            <Item
-              rounded
-              style={{
-                width: '100%',
-                backgroundColor: 'lightgray',
-                color: 'white',
-              }}>
-              <Input placeholder="Search..." />
-            </Item>
-          </Animatable.View>
-        )}
+        
         <View
           style={{
-            height: '15%',
+            height: '13%',
             flexDirection: 'row',
             justifyContent: 'space-between',
           }}>
@@ -80,7 +74,7 @@ export default App = () => {
               Services
             </Text>
           </View>
-  
+            
           <View
             style={{
               height: '100%',
@@ -89,32 +83,13 @@ export default App = () => {
               marginRight: '3%',
               flexDirection: 'row',
             }}>
-            <TouchableOpacity onPress={() => setShow(!show)}>
-              <Icon active name="search" type="FontAwesome" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Notification')}>
-              <Icon active name="bell" type="Entypo" />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <Item
-            full
-            style={{width: '85%', backgroundColor: 'lightgray', color: 'white'}}>
-            <Input placeholder="Icon Alignment in Textbox" />
-          </Item>
-          <Icon
+            <Icon
             name="menu"
             type="Entypo"
             style={{marginRight: '2%', fontSize: 40}}
             onPress={() => navigation.openDrawer()}
           />
+          </View>
         </View>
         {currentUser.isAdmin == '1' ?
          <ScrollView>

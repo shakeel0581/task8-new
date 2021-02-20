@@ -33,6 +33,7 @@ import Events from './component/Events';
 import Update_Profile from './component/Update_Profile';
 import Nav from './component/navigator/DrawerNavigator';
 import UserList from './component/TabScreen/userList';
+import Service from './component/service';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -50,6 +51,11 @@ const MainApp = () => {
         <Stack.Screen
           name="Nav"
           component={Nav}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Service"
+          component={Service}
           options={{headerShown: false}}
         />
         <Stack.Screen

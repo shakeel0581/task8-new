@@ -68,14 +68,6 @@ const  handalAuth = () => {
         rounded>
         <Text style={styles.btnTxt}>general person</Text>
       </Button>
-      
-      <Title style={{fontSize: 20, color: 'lightgray', marginTop: '5%'}}>
-        From{' '}
-      </Title>
-      <Title
-        style={{fontSize: 25, color: 'lightgray', textTransform: 'uppercase'}}>
-        editor systima{' '}
-      </Title>
     </Container>
   );
 };

@@ -13,10 +13,11 @@ import Screen1 from './MyServices1';
 import Screen2 from './MyServices2';
 import ServicesList from "./TabScreen/services";
 import ServiceRequest from "./OurServices";
+import UserList from "./TabScreen/userList";
 
 const Tab = createBottomTabNavigator();
 
-const Services = () => {
+const Services = (props) => {
   let [currentScreen, setCurrentScreen] = useState();
   let [show, setShow] = useState(false);
 
@@ -28,7 +29,7 @@ const Services = () => {
       }}>
       <Tab.Screen
         name="Home2"
-        component={ServicesList}
+        component={ServiceRequest}
         options={{
           tabBarLabel: () => {
             return (
@@ -53,7 +54,7 @@ const Services = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              onPress={() => setCurrentScreen(Screen1)}>
+              onPress={() => setCurrentScreen(ServiceRequest)}>
               <Image
                 source={require('./assets/9.png')}
                 style={{height: 30, width: 30}}
@@ -175,9 +176,11 @@ const Services = () => {
           ),
         }}
       /> */}
+
+  {props.currentUser.isAdmin == '1'?
       <Tab.Screen
         name="Home4"
-        component={Screen1}
+        component={UserList}
         options={{
           tabBarLabel: () => {
             return (
@@ -190,7 +193,7 @@ const Services = () => {
                   fontSize: 12,
                 }}>
                 {' '}
-                Approvals
+                All user
               </Text>
             );
           },
@@ -206,15 +209,15 @@ const Services = () => {
               onPress={() => setCurrentScreen(Screen1)}>
               <Icon
                 type="AntDesign"
-                name="checkcircleo"
+                name="team"
                 style={{fontSize: 25, color: 'white'}}
               />
             </View>
           ),
         }}
-      />
+      /> :
       <Tab.Screen
-        name="Home5"
+        name="Home4"
         component={Screen2}
         options={{
           tabBarLabel: () => {
@@ -223,12 +226,12 @@ const Services = () => {
                 style={{
                   backgroundColor: 'black',
                   width: '100%',
+                  height: '80%',
                   color: 'white',
                   textAlign: 'center',
                   fontSize: 12,
                 }}>
-                {' '}
-                More
+                Feature not available yet
               </Text>
             );
           },
@@ -242,11 +245,50 @@ const Services = () => {
                 alignItems: 'center',
               }}
               onPress={() => setCurrentScreen(Screen2)}>
-              <Icon
+              {/* <Icon
                 type="Feather"
                 name="menu"
                 style={{fontSize: 25, color: 'white'}}
-              />
+              /> */}
+            </View>
+          ),
+        }}
+      />
+      }
+      <Tab.Screen
+        name="Home5"
+        component={Screen2}
+        options={{
+          tabBarLabel: () => {
+            return (
+              <Text
+                style={{
+                  backgroundColor: 'black',
+                  width: '100%',
+                  height: '80%',
+                  color: 'white',
+                  textAlign: 'center',
+                  fontSize: 12,
+                }}>
+                Feature not available yet
+              </Text>
+            );
+          },
+          tabBarIcon: ({color, size}) => (
+            <View
+              style={{
+                backgroundColor: 'black',
+                height: '115%',
+                width: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              onPress={() => setCurrentScreen(Screen2)}>
+              {/* <Icon
+                type="Feather"
+                name="menu"
+                style={{fontSize: 25, color: 'white'}}
+              /> */}
             </View>
           ),
         }}

@@ -28,13 +28,13 @@ const App = ({route}) => {
   const [loader, setloader] = React.useState(false);
   const name = route.params ? route.params.name : null;
 
+  // const [email, setEmail] = React.useState('sh@SpeechGrammarList.codg');
+  // const [memberId, setMemberId] = React.useState('123405-0236339-78');
+  // const [password, setPassword] = React.useState('12345678');
+
   const [email, setEmail] = React.useState('');
   const [memberId, setMemberId] = React.useState('');
   const [password, setPassword] = React.useState('');
-
-  // const [email, setEmail] = React.useState('owais.raza@codup.io');
-  // const [memberId, setMemberId] = React.useState('42201-2399157-3');
-  // const [password, setPassword] = React.useState('test123');
 
   const LogIn = () => {
     setloader(true);
