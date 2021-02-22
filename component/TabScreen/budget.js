@@ -144,8 +144,6 @@ const init =() => {
       )
     }
 
-    console.log(eventsData)
-
   return (
     <Container>
       
@@ -164,12 +162,13 @@ const init =() => {
         <Body>
           <Text>Add budget</Text>
         </Body>
-        
+        {currentUser.isAdmin == '1' && currentUser.level == 'super' &&
           <Right>
             <TouchableOpacity onPress={() => setModalDel(true)}>
               <Icon active name="plus" type="AntDesign" />
             </TouchableOpacity>
           </Right>
+        }
       </Header>
       <Loader loading={loader} />
         <FlatList

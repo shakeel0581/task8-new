@@ -192,7 +192,8 @@ const Events = () => {
         <Body>
           <Text>Events</Text>
         </Body>
-        {currentUser.isAdmin == '1' &&  <Right>
+        {currentUser.isAdmin == '1' && (currentUser.level == 'super' || currentUser.level == 'level1') &&  
+        <Right>
         <TouchableOpacity onPress={() => {
               setModal(true);
               settitle('');
@@ -214,7 +215,7 @@ const Events = () => {
                     <Text style={styles.desc}> {item.description}</Text>
                     <Text style={styles.date}> {item.expiry}</Text>
                 </View>
-              {currentUser.isAdmin == '1' &&                 
+              {currentUser.isAdmin == '1' && (currentUser.level == 'super' || currentUser.level == 'level1') &&                
                 <View style={{width:'10%',alignItems:'flex-end',alignSelf:'center'}}>
                 <Icon onPress={()=>{setModalDel2(true);setIdDel(item.id)}} style={{marginBottom:15,color:'red'}} active name="delete" type="AntDesign" />
 

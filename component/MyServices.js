@@ -177,7 +177,7 @@ const Services = (props) => {
         }}
       /> */}
 
-  {props.currentUser.isAdmin == '1'?
+  {props.currentUser.isAdmin == '1' &&
       <Tab.Screen
         name="Home4"
         component={UserList}
@@ -215,84 +215,9 @@ const Services = (props) => {
             </View>
           ),
         }}
-      /> :
-      <Tab.Screen
-        name="Home4"
-        component={Screen2}
-        options={{
-          tabBarLabel: () => {
-            return (
-              <Text
-                style={{
-                  backgroundColor: 'black',
-                  width: '100%',
-                  height: '80%',
-                  color: 'white',
-                  textAlign: 'center',
-                  fontSize: 12,
-                }}>
-                Feature not available yet
-              </Text>
-            );
-          },
-          tabBarIcon: ({color, size}) => (
-            <View
-              style={{
-                backgroundColor: 'black',
-                height: '115%',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              onPress={() => setCurrentScreen(Screen2)}>
-              {/* <Icon
-                type="Feather"
-                name="menu"
-                style={{fontSize: 25, color: 'white'}}
-              /> */}
-            </View>
-          ),
-        }}
-      />
+      /> 
       }
-      <Tab.Screen
-        name="Home5"
-        component={Screen2}
-        options={{
-          tabBarLabel: () => {
-            return (
-              <Text
-                style={{
-                  backgroundColor: 'black',
-                  width: '100%',
-                  height: '80%',
-                  color: 'white',
-                  textAlign: 'center',
-                  fontSize: 12,
-                }}>
-                Feature not available yet
-              </Text>
-            );
-          },
-          tabBarIcon: ({color, size}) => (
-            <View
-              style={{
-                backgroundColor: 'black',
-                height: '115%',
-                width: '100%',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              onPress={() => setCurrentScreen(Screen2)}>
-              {/* <Icon
-                type="Feather"
-                name="menu"
-                style={{fontSize: 25, color: 'white'}}
-              /> */}
-            </View>
-          ),
-        }}
-      />
+     
     </Tab.Navigator>
   );
 };

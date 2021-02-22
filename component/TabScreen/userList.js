@@ -61,15 +61,14 @@ const Events = () => {
     }).
     then(res1 => {
       setEventsData(res1.data);
-    //   Server.get('/api/getuser',{
-    //     headers:{
-    //         'Authorization': `Bearer ${login_row.access_token}`
-    //     }
-    //   }).then(res => {
-    //     setCurrentUser(res.data);
-    //     setloader(false);
-    //   });
-    setloader(false);
+      Server.get('/api/getuser',{
+        headers:{
+            'Authorization': `Bearer ${login_row.access_token}`
+        }
+      }).then(res => {
+        setCurrentUser(res.data);
+        setloader(false);
+      });
 
     }).
     catch(err => {
@@ -144,15 +143,19 @@ const Events = () => {
                     <Text style={styles.desc}> {item.email}</Text>
                     <Text style={styles.date}> {item.phone}</Text>
                 </View>
-              {item.isactive != '1' ?                
-                <View style={{width:'10%',alignItems:'flex-end',alignSelf:'center'}}>
-                    <Icon onPress={()=>{setloader(true);statusUpdate(item.id,'Approved',1);}} style={{marginBottom:15,color:'green'}} active name="check" type="AntDesign" />
-                </View> 
-                :
-                <View style={{width:'10%',alignItems:'flex-end',alignSelf:'center'}}>
-                    <Icon onPress={()=>{setloader(true);statusUpdate(item.id,'Rejected',0);}} style={{marginBottom:15,color:'red'}} active name="close" type="AntDesign" />
-                </View>
-                }
+                {currentUser.isAdmin == '1' && (currentUser.level == 'super' || currentUser.level == 'level1' || currentUser.level == 'level2') &&
+                  <>
+                  {item.isactive != '1' ?                
+                    <View style={{width:'10%',alignItems:'flex-end',alignSelf:'center'}}>
+                        <Icon onPress={()=>{setloader(true);statusUpdate(item.id,'Approved',1);}} style={{marginBottom:15,color:'green'}} active name="check" type="AntDesign" />
+                    </View> 
+                    :
+                    <View style={{width:'10%',alignItems:'flex-end',alignSelf:'center'}}>
+                        <Icon onPress={()=>{setloader(true);statusUpdate(item.id,'Rejected',0);}} style={{marginBottom:15,color:'red'}} active name="close" type="AntDesign" />
+                    </View>
+                    }
+              </>
+              }
             </View>
             }
             keyExtractor={(item) => item.id.toString()}

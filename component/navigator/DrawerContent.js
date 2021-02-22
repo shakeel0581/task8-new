@@ -14,6 +14,8 @@ import {
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {useNavigation, CommonActions } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
 import Server from "../Server";
@@ -65,9 +67,9 @@ export default function DrawerContent(props) {
                 <Icon name="home-outline" color={color} size={size} />
               )}
               label="Home"
-              // onPress={() => {
-              //   props.navigation.navigate('HomeScreen');
-              // }}
+              onPress={() => {
+                props.navigation.navigate('Home3');
+              }}
             />
             <DrawerItem
               icon={({color, size}) => (
@@ -91,14 +93,14 @@ export default function DrawerContent(props) {
             <DrawerItem 
               onPress={() => navigation.navigate('Announcements')}
               icon={({color, size}) => (
-                <Icon name="exit-to-app" color={color} size={size} />
+                <MaterialIcons name="announcement" color={color} size={size} />
               )}
               label="Announcement"
             />
             <DrawerItem 
               onPress={() => navigation.navigate('Events')}
               icon={({color, size}) => (
-                <Icon name="exit-to-app" color={color} size={size} />
+                <MaterialIcons name="event" color={color} size={size} />
               )}
               label="Events"
             />
@@ -106,14 +108,14 @@ export default function DrawerContent(props) {
             <DrawerItem 
               onPress={() => navigation.navigate('Budget')}
               icon={({color, size}) => (
-                <Icon name="exit-to-app" color={color} size={size} />
+                <FontAwesome5 name="coins" color={color} size={size} />
               )}
               label="Add Budget"
             />
             }
             <DrawerItem
               icon={({color, size}) => (
-                <Icon name="exit-to-app" color={color} size={size} />
+                <FontAwesome5 name="donate" color={color} size={size} />
               )}
               onPress={() => navigation.navigate('DonateUs')}
               label="Donate Now"

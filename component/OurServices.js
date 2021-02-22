@@ -204,25 +204,33 @@ const init =() => {
         })
     }
 
+
+//     .slice(2,-1)
+// .slice(1,-1)
+// .slice(1,-1)
+// .slice(1,-1)
     
 
     const itemList = (item) => {
       const obj_row = item.form_object.toString().replace(/\s/g, '');
       const obj_row2 = obj_row.toString().replace(/\\n/g, '');
       const obj = obj_row2.split(',');
-      console.log()
       return(
         <View style={styles.container}>
           <View style={{width:'90%'}}>
             <Text style={styles.title}> {item.services}</Text>
-            <Text style={styles.desc}> {obj[0]}</Text>
-            <Text style={styles.desc}> {obj[1]}</Text>
-            <Text style={styles.desc}> {obj[2]}</Text>
-            <Text style={styles.desc}> {obj[3]}</Text>
+            <Text style={styles.desc}> {obj[0].toString().replace(/\{|\}|\"/g, '')}</Text>
+            {obj[1] &&
+              <>
+                <Text style={styles.desc}> {obj[1].toString().replace(/\{|\}|\"/g, '')}</Text>
+                <Text style={styles.desc}> {obj[2].toString().replace(/\{|\}|\"/g, '')}</Text>
+                <Text style={styles.desc}> {obj[3].toString().replace(/\{|\}|\"/g, '')}</Text>
+              </>
+            }
             <Text style={styles.desc}> status {item.status}</Text>
             <Text style={styles.date}> {item.note}</Text>
           </View>
-          {currentUser.isAdmin == '1' &&
+          {currentUser.isAdmin == '1' && (currentUser.level == 'super' || currentUser.level == 'level1' || currentUser.level == 'level2') &&
             <View style={{width:'10%',alignSelf:'center'}}>
               {item.status == 'Approved' ?
               <Icon style={{color:'green'}} active name="checksquare" type="AntDesign" />
@@ -505,7 +513,7 @@ const styles = StyleSheet.create({
     desc: {
         fontSize:14,
         // fontWeight:'bold',
-        color:'gray'
+        color:'gray',
     },
     date: {
         fontSize:12,

@@ -29,7 +29,6 @@ export default App = () => {
                     navigation.navigate('LoginScreen');
                 } else {
                     const login_row = JSON.parse(val);
-                    console.log(login_row)
                       Server.get('/api/getuser',{
                         headers:{
                             'Authorization': `Bearer ${login_row.access_token}`
@@ -66,12 +65,8 @@ export default App = () => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Image
-              source={require('../assets/2.jpg')}
-              style={{height: '35%', width: '20%', borderRadius: 50}}
-            />
             <Text style={{marginLeft: '4%', fontSize: 20, fontWeight: 'bold'}}>
-              Services
+              Dashboard
             </Text>
           </View>
             
