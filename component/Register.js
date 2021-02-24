@@ -31,10 +31,10 @@ const App = (props) => {
   const [fName, setFname] = useState('shakeel');
   const [lname, setlname] = useState('Ali');
   const [PhoneNo, setPhoneNo] = useState('03214567891');
-  const [Email, setEmail] = useState('sh@SpeechGrammarList.com');
+  const [Email, setEmail] = useState('sh@SpeechGrammarList.codg1');
   const [Education, setEducation] = useState('MSC');
   const [Gender, setGender] = useState('male');
-  const [memberId, setmemberId] = useState('123405-0236339-4');
+  const [memberId, setmemberId] = useState('123405-0236339-781');
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -61,23 +61,20 @@ const App = (props) => {
     }
   }).
     then(res => {
-      AsyncStorage.setItem('Login_row',JSON.stringify(res.data)).
-      then(res => {
         props.navigation.dispatch(
           CommonActions.reset({
             index: 1,
             routes: [
-              { name: 'Nav' }
+              { name: 'LoginScreen' }
             ],
           })
         );
         alert('Registration Success');
         setloader(false);
-      })
     }).
     catch(err => {
       alert('Invalid or already exist CNIC or Email');
-    setloader(false);
+      setloader(false);
   });
   }
 

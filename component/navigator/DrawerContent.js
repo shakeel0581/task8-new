@@ -73,15 +73,6 @@ export default function DrawerContent(props) {
             />
             <DrawerItem
               icon={({color, size}) => (
-                <Icons name="staro" color={color} size={size} />
-              )}
-              label="Overview"
-              // onPress={() => {
-              //   props.navigation.navigate('Featured');
-              // }}
-            />
-            <DrawerItem
-              icon={({color, size}) => (
                 <Icons name="like2" color={color} size={size} />
               )}
               label="Update Profile"

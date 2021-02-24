@@ -39,7 +39,7 @@ const App = ({route}) => {
       setMemberId('42201-2399157-3');
       setPassword('test123');
     }
-  }, [])
+  }, []);
 
   // const [email, setEmail] = React.useState('owais.raza@codup.io');
   // const [memberId, setMemberId] = React.useState('42201-2399157-3');

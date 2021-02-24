@@ -33,7 +33,14 @@ let ListAvatarExample = () => {
           <Text>About Us</Text>
         </Body>
       </Header>
-     
+      <Text style={{textAlign :'left', paddingVertical:10,paddingHorizontal:20,fontSize:16,color:'gray'}}>Bhavnagar is a city located in Gujrat, India and the Memon Muslims from Bhavnagar formed Bhavnagar MemonJamat.
+The massive migration was being performed at the time of Indo-Pak separation in 1947.
+The crucial time of migration is one of the reasons behind the foundation of Bhavnagar MemonJamat.
+It was founded to facilitate fellow community members. Initially the Jamat had a small setup in Ranchoreline Area of Karachi.
+But now as BMJ has so many social responsibilities that require the extension of premises for fulfillment of promising goals with more efforts,
+the operational community center is nowlocated near Mazar-e-Quaid. The various initiatives in different sectors including health,
+education, shelter and employment are the basic programs with a planned curriculum but the supporting programs are not limited to the mentioned 
+sectors but there are numerous programs also. BMJ is still focusing on the improvement of quality in every sector.</Text>
     </Container>
   );
 };

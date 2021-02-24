@@ -62,7 +62,7 @@ const  handalAuth = () => {
         <Text style={styles.btnTxt}>Admin</Text>
       </Button>
       <Button
-        warning={true}
+        info={true}
         style={styles.btns}
         onPressIn={() => navigation.navigate('General')}
         rounded>
