@@ -34,6 +34,7 @@ const OurServices = ({route}) => {
   const [loader, setloader] = React.useState(true);
   const [modal, setModal] = React.useState(false);
   const [service, setService] = React.useState('');
+  const [Routs, setRouts] = React.useState('/api/service');
   const [modalDel, setModalDel] = React.useState(false);
   const [idDel, setIdDel] = React.useState('');
 
@@ -60,22 +61,35 @@ const init =() => {
                 navigation.navigate('LoginScreen');
             } else {
                 const login_row = JSON.parse(val);
-                Server.get('api/service',{
+                Server.get('/api/getuser',{
                     headers:{
                         'Authorization': `Bearer ${login_row.access_token}`
                     }
                 }).
                 then(res1 => {
-                  Server.get('/api/getuser',{
-                    headers:{
-                        'Authorization': `Bearer ${login_row.access_token}`
-                    }
-                  }).then(res => {
-                    // console.log('token',login_row)
-                    setEventsData(res1.data.services);
-                    setCurrentUser(res.data);
-                    setloader(false);
-                  });
+                  setCurrentUser(res1.data);
+                  if (res1.data.isAdmin == '1') {
+                    setRouts('/api/all/services');
+                    Server.get('/api/all/services',{
+                      headers:{
+                          'Authorization': `Bearer ${login_row.access_token}`
+                      }
+                    }).then(res => {
+                      // console.log('token',login_row)
+                      setEventsData(res.data.services);
+                      setloader(false);
+                    });
+                  }else{
+                    Server.get('/api/service',{
+                      headers:{
+                          'Authorization': `Bearer ${login_row.access_token}`
+                      }
+                    }).then(res => {
+                      // console.log('token',login_row)
+                      setEventsData(res.data.services);
+                      setloader(false);
+                    });
+                  }
                 }).
                 catch(err => {
                     alert(err);
